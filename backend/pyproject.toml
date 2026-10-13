@@ -1,0 +1,30 @@
+[project]
+name = "clean-architecture-backend"
+version = "0.1.0"
+description = "FastAPI Clean Architecture port with PostgreSQL authentication and React frontend"
+requires-python = ">=3.12,<3.13"
+dependencies = [
+    "alembic>=1.20.0",
+    "asyncpg>=0.32.0",
+    "bcrypt>=5.0.0",
+    "fastapi[standard]>=0.143.0",
+    "motor>=3.7.1",
+    "pydantic>=2.14.0",
+    "pydantic-settings>=2.15.0",
+    "pyjwt[crypto]>=2.15.1",
+    "sqlalchemy[asyncio]>=2.1.4",
+]
+
+[dependency-groups]
+dev = ["httpx>=0.28.1", "pytest>=9.1.1", "ruff>=0.17.0"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+
+[tool.ruff]
+target-version = "py312"
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E", "F", "I"]

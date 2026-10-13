@@ -1,19 +1,27 @@
-version: '3.1'
-
+name: clean-architecture-practice
 services:
-
   db:
     image: postgres:15
     environment:
-      POSTGRES_PASSWORD: golang-first-api
+      POSTGRES_DB: ${FASTAPIAPP_POSTGRES_DB_NAME:?Set database name}
+      POSTGRES_USER: ${FASTAPIAPP_POSTGRES_DB_USER:?Set database user}
+      POSTGRES_PASSWORD: ${FASTAPIAPP_POSTGRES_DB_PASSWORD:?Set database password}
     ports:
-      - "5432:5432"
-
+      - "127.0.0.1:${FASTAPIAPP_POSTGRES_DB_PORT:-5432}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
   mongodb:
     image: mongo:6.0.8
+    profiles: ["mongodb"]
     ports:
-      - "27017:27017"
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: golang-first-api
-
+      - "127.0.0.1:27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+volumes:
+  postgres_data:
+  mongodb_data:
